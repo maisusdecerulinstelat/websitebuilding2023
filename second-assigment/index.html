@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+        <style>
+                .error {
+                    border: 1px solid red;
+                }
+        
+                .valid {
+                    border: 1px solid green;
+                }
+        
+                .error-icon {
+                    color: red;
+                    margin-left: 5px;
+                }
+        
+                .valid-icon {
+                    color: green;
+                    margin-left: 5px;
+                }
+            </style>
+
+</head>
+
+<body>
+
+     
+    <div class="container">
+        <form id="form" class="form" novalidate>
+            <h2>Register</h2>
+            <div class="form-control">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter Username" required>
+                <small>Error Message</small>
+            </div>
+           
+            <div class="form-control">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password">
+                <i class="far fa-eye" id="show" onclick="togglePassword()"></i>
+                <i class="far fa-eye-slash" id="hide" onclick="togglePassword()"></i>
+                <small>Error Message</small>
+            </div>
+            <div class="form-control">
+                <label for="password2">Confirm Password</label>
+                <input type="password" id="password2" placeholder="Enter password again">
+                <small>Error Message</small>
+            </div>
+            <button>Submit</button>
+        </form>
+    </div>
+>
+        <script>
+                // Selectăm formularul
+                var form = document.querySelector('form');
+
+                // Adăugăm un ascultător de evenimente pentru evenimentul de trimitere a formularului
+                form.addEventListener('submit', function (event) {
+                        // Oprim trimiterea formularului
+                        event.preventDefault();
+
+                        // Resetăm erorile și stilurile de validare
+                        resetErrors();
+
+                        // Obținem valorile introduse de utilizator
+                        var username = document.getElementById('username').value;
+                        var password = document.getElementById('password').value;
+
+                        // Verificăm valorile introduse de utilizator
+                        var isValid = true;
+                        var errorMessages = [];
+
+                        // Verificăm numele de utilizator
+                        if (username === '') {
+                                isValid = false;
+                                errorMessages.push('please enter username');
+                                showError('username');
+                        } else if (username !== 'new_user') {
+                                isValid = false;
+                                errorMessages.push('please enter a valid username');
+                                showError('username');
+                        }
+
+                        // Verificăm parola
+                        if (password === '') {
+                                isValid = false;
+                                errorMessages.push('please enter password');
+                                showError('password');
+                        } else if (password !== '123456789') {
+                                isValid = false;
+                                errorMessages.push('please enter a valid password');
+                                showError('password');
+                        }
+
+                        // Afișăm mesajul corespunzător pe pagină
+                        var messageContainer = document.createElement('div');
+                        messageContainer.classList.add('message-container');
+
+                        if (isValid) {
+                                messageContainer.classList.add('success');
+                                messageContainer.textContent = 'Successful login!';
+                        } else {
+                                messageContainer.classList.add('error');
+                                errorMessages.forEach(function (errorMessage) {
+                                        var errorMessageElement = document.createElement('p');
+                                        errorMessageElement.textContent = errorMessage;
+                                        messageContainer.appendChild(errorMessageElement);
+                                });
+                        }
+
+                        // Adăugăm containerul de mesaje sub formular
+                        form.appendChild(messageContainer);
+                });
+
+                // Funcție pentru resetarea erorilor și stilurilor de validare
+                function resetErrors() {
+                        var errorMessages = document.querySelectorAll('.error-message');
+                        errorMessages.forEach(function (errorMessage) {
+                                errorMessage.parentNode.removeChild(errorMessage);
+                        });
+
+                        var inputFields = document.querySelectorAll('.form-field');
+                        inputFields.forEach(function (inputField) {
+                                inputField.classList.remove('invalid');
+                        });
+
+                        var messageContainers = document.querySelectorAll('.message-container');
+                        messageContainers.forEach(function (messageContainer) {
+                                messageContainer.parentNode.removeChild(messageContainer);
+                        });
+                }
+
+                // Funcție pentru afișarea stilurilor de eroare pentru un câmp
+                function showError(fieldName) {
+                        var field = document.getElementById(fieldName);
+                        field.classList.add('invalid');
+
+                        var errorMessage = document.createElement('p');
+                        errorMessage.classList.add('error-message');
+                        errorMessage.textContent = 'Invalid ' + fieldName;
+                        field.parentNode.appendChild(errorMessage);
+                }
+
+        </script>
+</body>
+</html>
